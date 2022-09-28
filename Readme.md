@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Олег Гречищев](https://up.htmlacademy.ru/javascript/27/user/1024441).
-* Наставник: `Неизвестно`.
+* Наставник: [Максим Прусаков](https://htmlacademy.ru/profile/hikikomori).
 
 ---
 
