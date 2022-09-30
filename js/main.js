@@ -16,6 +16,6 @@ const getRandomInteger = (fromNumber, beforeNumber) => (
 
 getRandomInteger();
 
-const isMaxLength = (string, maxLength) => (maxLength >= string);
+const isMaxLength = (string, maxLength) => (maxLength >= string.length);
 
 isMaxLength();
