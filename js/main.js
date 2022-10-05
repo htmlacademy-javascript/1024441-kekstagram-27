@@ -1,21 +1,69 @@
 //Функцияю взял с ресурса https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-/*Из ТЗ :Придумайте, как функция будет вести себя, если передать значение «до» меньшее, чем значение «от», или равное ему.
-Например, в этом случае функция также может возвращать NaN Или же вы можете проверить, какой из аргументов больше, а какой меньше, и при необходимости поменять их местами.
-- в принципе ничего сложного как я понима делаем следующее :
-(beforeNumber < fromNumber)
-? let swap = beforeNumber
-beforeNumber = fromNumber
-fromNumber = swap
-но я не понимаю как это все правильно записать тернарными операторами, крутил по всякому*/
 
-const getRandomInteger = (fromNumber, beforeNumber) => (
-  fromNumber <= 0 || beforeNumber <= 0 || beforeNumber <= fromNumber || !Number.isInteger(fromNumber) || !Number.isInteger(beforeNumber)
-    ? NaN
-    : Math.floor(Math.random() * (fromNumber - beforeNumber + 1)) + beforeNumber
-);
+const getRandomInteger = (fromNumber, beforeNumber) => {
+  fromNumber = Math.ceil(fromNumber);
+  beforeNumber = Math.floor(beforeNumber);
+  return Math.floor(Math.random() * (beforeNumber - fromNumber) + fromNumber);
+};
 
 getRandomInteger();
 
-const isMaxLength = (string, maxLength) => (maxLength >= string.length);
+const isMaxLength = (string, maxLength) => string.length <= maxLength;
 
-isMaxLength();
+isMaxLength('олег', 3);
+
+const SIMILAR_OBJECT_PHOTO = 25;
+
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+
+const MESSAGES = [
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'В целом всё неплохо. Но не всё.',
+  'Всё отлично!',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.'
+];
+
+const COMMENT_NAMES = [
+  'Елена',
+  'Вадим',
+  'Мария',
+  'Олег',
+  'Наталья',
+  'Евгений',
+  'Евгения'
+];
+
+const createComment = (id) => ({
+  id,
+  avatar: `img/avatar-${id}.svg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(COMMENT_NAMES),
+});
+
+const createObject = (id) => {
+  const comments = [];
+  const commentsCount = getRandomInteger(1, 2);
+
+  for (let i = 1; i <= commentsCount; i++) {
+    comments.push(createComment(i));
+  }
+
+  return {
+    id,
+    url: `photos/${id}.jpg`,
+    description: 'А я вообще с малышом на руках зарабатываю по 40тыс. в неделю',
+    likes: getRandomInteger(15, 200),
+    comments
+  };
+};
+
+const createObjects = (count) => {
+  const objects = [];
+
+  for (let i = 1; i <= count; i++) {
+    objects.push(createObject(i));
+  }
+  return objects;
+};
+
+createObjects(SIMILAR_OBJECT_PHOTO);
