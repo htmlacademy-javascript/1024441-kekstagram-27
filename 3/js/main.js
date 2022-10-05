@@ -16,14 +16,14 @@ const SIMILAR_OBJECT_PHOTO = 25;
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const MESSAGE = [
+const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'В целом всё неплохо. Но не всё.',
   'Всё отлично!',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.'
 ];
 
-const COMMENT_NAME = [
+const COMMENT_NAMES = [
   'Елена',
   'Вадим',
   'Мария',
@@ -36,8 +36,8 @@ const COMMENT_NAME = [
 const createComment = (id) => ({
   id,
   avatar: `img/avatar-${id}.svg`,
-  message: getRandomArrayElement(MESSAGE),
-  name: getRandomArrayElement(COMMENT_NAME),
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(COMMENT_NAMES),
 });
 
 const createObject = (id) => {
@@ -50,8 +50,8 @@ const createObject = (id) => {
 
   return {
     id,
-    url: `photos${id}.jpg`,
-    discription: 'А я вообще с малышом на руках зарабатываю по 40тыс. в неделю',
+    url: `photos/${id}.jpg`,
+    description: 'А я вообще с малышом на руках зарабатываю по 40тыс. в неделю',
     likes: getRandomInteger(15, 200),
     comments
   };
