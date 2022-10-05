@@ -8,9 +8,9 @@ const getRandomInteger = (fromNumber, beforeNumber) => {
 
 getRandomInteger();
 
-const isMaxLength = (string, maxLength) => (maxLength >= string.length);
+const isMaxLength = (string, maxLength) => string.length <= maxLength;
 
-isMaxLength();
+isMaxLength('олег', 3);
 
 const SIMILAR_OBJECT_PHOTO = 25;
 
