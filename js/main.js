@@ -1,3 +1,5 @@
-import {generateObjects} from './data.js';
+import {createObjects} from './data.js';
+import {createMiniatures} from './create-miniatures.js';
 
-generateObjects();
+createObjects();
+createMiniatures();
