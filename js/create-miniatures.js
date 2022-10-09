@@ -1,12 +1,9 @@
-import {createObjects} from './data.js';
-
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
-const similarMiniatures = createObjects();
 const similarListMiniature = document.createDocumentFragment();
 
-const createMiniatures = () => {
-  similarMiniatures.forEach((({url, likes, comments}) => {
+const createMiniatures = (createdObjet) => {
+  createdObjet.forEach((({url, likes, comments}) => {
     const miniature = templateMiniatures.cloneNode(true);
     miniature.querySelector('.picture__img').src = url;
     miniature.querySelector('.picture__comments').textContent = comments.length;
