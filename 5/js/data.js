@@ -1,7 +1,5 @@
 import {getRandomInteger,getRandomArrayElement} from './util.js';
 
-// const SIMILAR_OBJECT_PHOTO = 25;
-
 const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'В целом всё неплохо. Но не всё.',
