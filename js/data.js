@@ -1,7 +1,5 @@
 import {getRandomInteger,getRandomArrayElement} from './util.js';
 
-const SIMILAR_OBJECT_PHOTO = 25;
-
 const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'В целом всё неплохо. Но не всё.',
@@ -28,7 +26,7 @@ const createComment = (id) => ({
 
 const createObject = (id) => {
   const comments = [];
-  const commentsCount = getRandomInteger(1, 2);
+  const commentsCount = getRandomInteger(1, 10);
 
   for (let i = 1; i <= commentsCount; i++) {
     comments.push(createComment(i));
@@ -43,15 +41,14 @@ const createObject = (id) => {
   };
 };
 
-const generateObjects = () => {
-  const createObjects = (count) => {
-    const objects = [];
-    for (let i = 1; i <= count; i++) {
-      objects.push(createObject(i));
-    }
-    return objects;
-  };
-  return createObjects(SIMILAR_OBJECT_PHOTO);
+
+const createObjects = (count = 25) => {
+  const objects = [];
+  for (let i = 1; i <= count; i++) {
+    objects.push(createObject(i));
+  }
+  return objects;
 };
 
-export {generateObjects};
+
+export {createObjects};
