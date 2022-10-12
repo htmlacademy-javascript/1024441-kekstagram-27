@@ -1,6 +1,6 @@
-import {elementCreator} from './html-element-creator.js';
+import {elementCreator} from './util.js';
 
-const MiniatureClickHandler = (url, likes, comments, description) => {
+const openCloseListenerCommentsAdds = (url, likes, comments, description) => {
 
   const bigPicture = document.querySelector('.big-picture');
   bigPicture.classList.remove('hidden');
@@ -61,4 +61,4 @@ const MiniatureClickHandler = (url, likes, comments, description) => {
   socialComments.append(commentFragments);
 };
 
-export {MiniatureClickHandler};
+export {openCloseListenerCommentsAdds};
