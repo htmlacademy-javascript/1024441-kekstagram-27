@@ -1,4 +1,4 @@
-import {MiniatureClickHandler} from './MiniatureClickHandler.js';
+import {openCloseListenerCommentsAdds} from './open-close-listener-comments-adds.js';
 
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
@@ -11,7 +11,7 @@ const createMiniatures = (createdObjet) => {
     miniature.querySelector('.picture__comments').textContent = comments.length;
     miniature.querySelector('.picture__likes').textContent = likes;
     miniature.addEventListener('click', () => {
-      MiniatureClickHandler(url, likes, comments, description);
+      openCloseListenerCommentsAdds(url, likes, comments, description);
     });
     similarListMiniature.append(miniature);
   }));
