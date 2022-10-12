@@ -1,4 +1,4 @@
-import {addThumbnailClickHandler} from './addThumbnailClickHandler.js';
+import {MiniatureClickHandler} from './MiniatureClickHandler.js';
 
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
@@ -10,13 +10,12 @@ const createMiniatures = (createdObjet) => {
     miniature.querySelector('.picture__img').src = url;
     miniature.querySelector('.picture__comments').textContent = comments.length;
     miniature.querySelector('.picture__likes').textContent = likes;
-    miniature.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      addThumbnailClickHandler(url, likes, comments, description);
+    miniature.addEventListener('click', () => {
+      MiniatureClickHandler(url, likes, comments, description);
     });
-    similarListMiniature.appendChild(miniature);
+    similarListMiniature.append(miniature);
   }));
-  pictures.appendChild(similarListMiniature);
+  pictures.append(similarListMiniature);
 };
 
 export {createMiniatures};
