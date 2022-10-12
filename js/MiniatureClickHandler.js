@@ -1,20 +1,23 @@
-import {commentCreator} from './comment-creator.js';
+import {elementCreator} from './html-element-creator.js';
 
-const addThumbnailClickHandler = (url, likes, comments, description) => {
+const MiniatureClickHandler = (url, likes, comments, description) => {
+
   const bigPicture = document.querySelector('.big-picture');
   bigPicture.classList.remove('hidden');
 
-  const body = document.querySelector('body');
+  const body = document.body;
   body.classList.add('modal-open');
 
   const cancel = bigPicture.querySelector('.big-picture__cancel');
   cancel.addEventListener('click', ()=> {
     bigPicture.classList.add('hidden');
+    body.classList.remove('modal-open');
   });
 
   document.addEventListener('keydown', (evt)=> {
     if(evt.key === 'Escape') {
       bigPicture.classList.add('hidden');
+      body.classList.remove('modal-open');
     }
   });
 
@@ -36,21 +39,26 @@ const addThumbnailClickHandler = (url, likes, comments, description) => {
   const newComment = bigPicture.querySelector('.comments-loader');
   newComment.classList.add('hidden');
 
-  commentCreator(comments);
+
+  const socialComments = document.querySelector('.social__comments');
+  socialComments.innerHTML = '';
+
+  const commentFragments = document.createDocumentFragment();
+
+  comments.forEach((({avatar, name, message}) => {
+    const commentContainer = elementCreator('li', 'social__comment');
+
+    const avatarUsers = elementCreator('img', 'social__picture');
+    avatarUsers.src = avatar;
+    avatarUsers.alt = name;
+    commentContainer.append(avatarUsers);
+
+    const commentText = elementCreator('p', 'social__text');
+    commentText.textContent = message;
+    commentContainer.append(commentText);
+    commentFragments.append(commentContainer);
+  }));
+  socialComments.append(commentFragments);
 };
 
-export {addThumbnailClickHandler};
-
-// Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments. Разметка каждого комментария должна выглядеть так:
-
-// <li class="social__comment">
-//     <img
-//         class="social__picture"
-//         src="{{аватар}}"
-//         alt="{{имя комментатора}}"
-//         width="35" height="35">
-//     <p class="social__text">{{текст комментария}}</p>
-// </li>
-
-
-// Подключите модуль в проект
+export {MiniatureClickHandler};
