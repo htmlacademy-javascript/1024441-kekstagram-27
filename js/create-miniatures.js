@@ -1,16 +1,21 @@
+import {showBigPicture} from './big-pictures.js';
+
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
 const similarListMiniature = document.createDocumentFragment();
 
 const createMiniatures = (createdObjet) => {
-  createdObjet.forEach((({url, likes, comments}) => {
+  createdObjet.forEach((({url, likes, comments, description}) => {
     const miniature = templateMiniatures.cloneNode(true);
     miniature.querySelector('.picture__img').src = url;
     miniature.querySelector('.picture__comments').textContent = comments.length;
     miniature.querySelector('.picture__likes').textContent = likes;
-    similarListMiniature.appendChild(miniature);
+    miniature.addEventListener('click', () => {
+      showBigPicture(url, likes, comments, description);
+    });
+    similarListMiniature.append(miniature);
   }));
-  pictures.appendChild(similarListMiniature);
+  pictures.append(similarListMiniature);
 };
 
 export {createMiniatures};
