@@ -1,6 +1,6 @@
 import {elementCreator} from './util.js';
 
-const bigPicture = (url, likes, comments, description) => {
+const showBigPicture = (url, likes, comments, description) => {
 
   const fullPicture = document.querySelector('.big-picture');
   fullPicture.classList.remove('hidden');
@@ -8,19 +8,19 @@ const bigPicture = (url, likes, comments, description) => {
   const body = document.body;
   body.classList.add('modal-open');
 
-  const openCloseAdd = () => {
+  const closeBigPicture = () => {
     fullPicture.classList.add('hidden');
     body.classList.remove('modal-open');
   };
 
   const cancel = fullPicture.querySelector('.big-picture__cancel');
   cancel.addEventListener('click', ()=> {
-    openCloseAdd();
+    closeBigPicture();
   });
 
   document.addEventListener('keydown', (evt)=> {
     if(evt.key === 'Escape') {
-      openCloseAdd();
+      closeBigPicture();
     }
   });
 
@@ -64,4 +64,4 @@ const bigPicture = (url, likes, comments, description) => {
   socialComments.append(commentFragments);
 };
 
-export {bigPicture};
+export {showBigPicture};

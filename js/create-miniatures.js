@@ -1,4 +1,4 @@
-import {bigPicture} from './big-picture.js';
+import {showBigPicture} from './show-big-pictures.js';
 
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
@@ -11,7 +11,7 @@ const createMiniatures = (createdObjet) => {
     miniature.querySelector('.picture__comments').textContent = comments.length;
     miniature.querySelector('.picture__likes').textContent = likes;
     miniature.addEventListener('click', () => {
-      bigPicture(url, likes, comments, description);
+      showBigPicture(url, likes, comments, description);
     });
     similarListMiniature.append(miniature);
   }));
