@@ -14,7 +14,7 @@ const isMaxLength = (string, maxLength) => string.length <= maxLength;
 
 isMaxLength('олег', 3);
 
-const creatElement = (element, elementClass) => {
+const creatDOMElement = (element, elementClass) => {
   const object = document.createElement(element);
   object.classList.add(elementClass);
   if (object === 'img') {
@@ -24,4 +24,4 @@ const creatElement = (element, elementClass) => {
   return object;
 };
 
-export {getRandomInteger, getRandomArrayElement, creatElement};
+export {getRandomInteger, getRandomArrayElement, creatDOMElement};

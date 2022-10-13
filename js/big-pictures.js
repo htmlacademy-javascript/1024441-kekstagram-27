@@ -1,4 +1,4 @@
-import {creatElement} from './util.js';
+import {creatDOMElement} from './util.js';
 
 const showBigPicture = (url, likes, comments, description) => {
 
@@ -49,14 +49,14 @@ const showBigPicture = (url, likes, comments, description) => {
   const commentFragments = document.createDocumentFragment();
 
   comments.forEach((({avatar, name, message}) => {
-    const commentContainer = creatElement('li', 'social__comment');
+    const commentContainer = creatDOMElement('li', 'social__comment');
 
-    const avatarUsers = creatElement('img', 'social__picture');
+    const avatarUsers = creatDOMElement('img', 'social__picture');
     avatarUsers.src = avatar;
     avatarUsers.alt = name;
     commentContainer.append(avatarUsers);
 
-    const commentText = creatElement('p', 'social__text');
+    const commentText = creatDOMElement('p', 'social__text');
     commentText.textContent = message;
     commentContainer.append(commentText);
     commentFragments.append(commentContainer);
