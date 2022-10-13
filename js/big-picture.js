@@ -1,42 +1,45 @@
 import {elementCreator} from './util.js';
 
-const openCloseListenerCommentsAdds = (url, likes, comments, description) => {
+const bigPicture = (url, likes, comments, description) => {
 
-  const bigPicture = document.querySelector('.big-picture');
-  bigPicture.classList.remove('hidden');
+  const fullPicture = document.querySelector('.big-picture');
+  fullPicture.classList.remove('hidden');
 
   const body = document.body;
   body.classList.add('modal-open');
 
-  const cancel = bigPicture.querySelector('.big-picture__cancel');
-  cancel.addEventListener('click', ()=> {
-    bigPicture.classList.add('hidden');
+  const openCloseAdd = () => {
+    fullPicture.classList.add('hidden');
     body.classList.remove('modal-open');
+  };
+
+  const cancel = fullPicture.querySelector('.big-picture__cancel');
+  cancel.addEventListener('click', ()=> {
+    openCloseAdd();
   });
 
   document.addEventListener('keydown', (evt)=> {
     if(evt.key === 'Escape') {
-      bigPicture.classList.add('hidden');
-      body.classList.remove('modal-open');
+      openCloseAdd();
     }
   });
 
-  const img = bigPicture.querySelector('img');
+  const img = fullPicture.querySelector('img');
   img.src = url;
 
-  const likesCount = bigPicture.querySelector('.likes-count');
+  const likesCount = fullPicture.querySelector('.likes-count');
   likesCount.textContent = likes;
 
-  const comment = bigPicture.querySelector('.comments-count');
+  const comment = fullPicture.querySelector('.comments-count');
   comment.textContent = comments.length;
 
-  const descriptionPhoto = bigPicture.querySelector('.social__caption');
+  const descriptionPhoto = fullPicture.querySelector('.social__caption');
   descriptionPhoto.textContent = description;
 
-  const commentCount = bigPicture.querySelector('.social__comment-count');
+  const commentCount = fullPicture.querySelector('.social__comment-count');
   commentCount.classList.add('hidden');
 
-  const newComment = bigPicture.querySelector('.comments-loader');
+  const newComment = fullPicture.querySelector('.comments-loader');
   newComment.classList.add('hidden');
 
 
@@ -61,4 +64,4 @@ const openCloseListenerCommentsAdds = (url, likes, comments, description) => {
   socialComments.append(commentFragments);
 };
 
-export {openCloseListenerCommentsAdds};
+export {bigPicture};

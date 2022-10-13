@@ -1,4 +1,4 @@
-import {openCloseListenerCommentsAdds} from './open-close-listener-comments-adds.js';
+import {bigPicture} from './big-picture.js';
 
 const pictures = document.querySelector('.pictures');
 const templateMiniatures = document.querySelector('#picture').content.querySelector('.picture');
@@ -11,7 +11,7 @@ const createMiniatures = (createdObjet) => {
     miniature.querySelector('.picture__comments').textContent = comments.length;
     miniature.querySelector('.picture__likes').textContent = likes;
     miniature.addEventListener('click', () => {
-      openCloseListenerCommentsAdds(url, likes, comments, description);
+      bigPicture(url, likes, comments, description);
     });
     similarListMiniature.append(miniature);
   }));
