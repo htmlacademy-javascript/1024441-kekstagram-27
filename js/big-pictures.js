@@ -1,28 +1,35 @@
-import {createDOMElement} from './util.js';
+import {
+  createDOMElement,
+  isEscapeKey,
+} from './util.js';
 
 const showBigPicture = (url, likes, comments, description) => {
-
   const fullPicture = document.querySelector('.big-picture');
-  fullPicture.classList.remove('hidden');
-
   const body = document.body;
-  body.classList.add('modal-open');
-
-  const closeBigPicture = () => {
-    fullPicture.classList.add('hidden');
-    body.classList.remove('modal-open');
+  const onFullPicEscKeydown = (evt) => {
+    if(isEscapeKey(evt)) {
+      closeBigPicture();
+    }
   };
-
   const cancel = fullPicture.querySelector('.big-picture__cancel');
-  cancel.addEventListener('click', ()=> {
+  cancel.addEventListener('click', () => {
     closeBigPicture();
   });
 
-  document.addEventListener('keydown', (evt)=> {
-    if(evt.key === 'Escape') {
-      closeBigPicture();
-    }
-  });
+  function openFullPic () {
+    fullPicture.classList.remove('hidden');
+    body.classList.add('modal-open');
+    document.addEventListener('keydown', onFullPicEscKeydown);
+  }
+
+  openFullPic();
+
+  function closeBigPicture () {
+    fullPicture.classList.add('hidden');
+    body.classList.remove('modal-open');
+
+    document.removeEventListener('keydown', onFullPicEscKeydown);
+  }
 
   const img = fullPicture.querySelector('img');
   img.src = url;

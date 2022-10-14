@@ -24,4 +24,11 @@ const createDOMElement = (element, elementClass) => {
   return object;
 };
 
-export {getRandomInteger, getRandomArrayElement, createDOMElement};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {
+  getRandomInteger,
+  getRandomArrayElement,
+  createDOMElement,
+  isEscapeKey
+};
