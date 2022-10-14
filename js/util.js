@@ -26,9 +26,42 @@ const createDOMElement = (element, elementClass) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+const ModalListener = (modal) => {
+
+  const body = document.body;
+
+  const onModalEscKeydown = (evt) => {
+    if(isEscapeKey(evt)) {
+      closeBigPicture();
+    }
+  };
+  const onCancelClick = () => {
+    closeBigPicture();
+  };
+
+  const cancel = modal.querySelector('.cancel');
+  cancel.addEventListener('click', onCancelClick);
+
+  function openFullPic () {
+    modal.classList.remove('hidden');
+    body.classList.add('modal-open');
+    document.addEventListener('keydown', onModalEscKeydown);
+  }
+
+  openFullPic();
+
+  function closeBigPicture () {
+    modal.classList.add('hidden');
+    body.classList.remove('modal-open');
+
+    document.removeEventListener('keydown', onModalEscKeydown);
+    cancel.removeEventListener('click', onCancelClick);
+  }
+};
+
 export {
   getRandomInteger,
   getRandomArrayElement,
   createDOMElement,
-  isEscapeKey
+  ModalListener
 };

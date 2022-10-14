@@ -1,35 +1,12 @@
 import {
   createDOMElement,
-  isEscapeKey,
+  ModalListener
 } from './util.js';
 
 const showBigPicture = (url, likes, comments, description) => {
   const fullPicture = document.querySelector('.big-picture');
-  const body = document.body;
-  const onFullPicEscKeydown = (evt) => {
-    if(isEscapeKey(evt)) {
-      closeBigPicture();
-    }
-  };
-  const cancel = fullPicture.querySelector('.big-picture__cancel');
-  cancel.addEventListener('click', () => {
-    closeBigPicture();
-  });
 
-  function openFullPic () {
-    fullPicture.classList.remove('hidden');
-    body.classList.add('modal-open');
-    document.addEventListener('keydown', onFullPicEscKeydown);
-  }
-
-  openFullPic();
-
-  function closeBigPicture () {
-    fullPicture.classList.add('hidden');
-    body.classList.remove('modal-open');
-
-    document.removeEventListener('keydown', onFullPicEscKeydown);
-  }
+  ModalListener(fullPicture);
 
   const img = fullPicture.querySelector('img');
   img.src = url;
