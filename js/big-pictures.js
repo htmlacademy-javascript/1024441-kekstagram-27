@@ -1,12 +1,12 @@
 import {
   createDOMElement,
-  ModalListener
+  ModalCloseListener
 } from './util.js';
 
 const showBigPicture = (url, likes, comments, description) => {
   const fullPicture = document.querySelector('.big-picture');
 
-  ModalListener(fullPicture);
+  ModalCloseListener(fullPicture);
 
   const img = fullPicture.querySelector('img');
   img.src = url;
@@ -26,13 +26,13 @@ const showBigPicture = (url, likes, comments, description) => {
   const newComment = fullPicture.querySelector('.comments-loader');
   newComment.classList.add('hidden');
 
-
   const socialComments = document.querySelector('.social__comments');
   socialComments.innerHTML = '';
 
   const commentFragments = document.createDocumentFragment();
 
   comments.forEach((({avatar, name, message}) => {
+
     const commentContainer = createDOMElement('li', 'social__comment');
 
     const avatarUsers = createDOMElement('img', 'social__picture');
@@ -46,6 +46,25 @@ const showBigPicture = (url, likes, comments, description) => {
     commentFragments.append(commentContainer);
   }));
   socialComments.append(commentFragments);
+
+  if(comments.length > 5) {
+    commentCount.classList.remove('hidden');
+    newComment.classList.remove('hidden');
+  }
+
+  const array = socialComments.querySelectorAll('li');
+
+  for(let i = 0; i < array.length; i++) {
+    if(i === 5) {
+      for(let j = i; j < array.length; j++) {
+        array[j].classList.add('hidden');
+      }
+    }
+  }
+
+  // newComment.addEventListener('click', () => {
+  //   // нужно перебрать массив array на наличие тега hidden contains/matches
+  // });
 };
 
 export {showBigPicture};

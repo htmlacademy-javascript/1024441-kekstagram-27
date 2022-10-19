@@ -12,8 +12,6 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 
 const isMaxLength = (string, maxLength) => string.length <= maxLength;
 
-isMaxLength('олег', 3);
-
 const createDOMElement = (element, elementClass) => {
   const object = document.createElement(element);
   object.classList.add(elementClass);
@@ -26,12 +24,10 @@ const createDOMElement = (element, elementClass) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const ModalListener = (modal) => {
-
+const ModalCloseListener = (modal) => {
   const body = document.body;
-
   const onModalEscKeydown = (evt) => {
-    if(isEscapeKey(evt)) {
+    if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description')) {
       closeBigPicture();
     }
   };
@@ -53,7 +49,6 @@ const ModalListener = (modal) => {
   function closeBigPicture () {
     modal.classList.add('hidden');
     body.classList.remove('modal-open');
-
     document.removeEventListener('keydown', onModalEscKeydown);
     cancel.removeEventListener('click', onCancelClick);
   }
@@ -63,5 +58,6 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   createDOMElement,
-  ModalListener
+  ModalCloseListener,
+  isMaxLength
 };
