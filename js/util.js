@@ -24,7 +24,7 @@ const createDOMElement = (element, elementClass) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const modalCloseListener = (modal) => {
+const listenerModalsCloser = (modal, onClose) => {
   const body = document.body;
   const closeModal = (evt) => {
     if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description')) {
@@ -51,6 +51,7 @@ const modalCloseListener = (modal) => {
     body.classList.remove('modal-open');
     document.removeEventListener('keydown', closeModal);
     cancel.removeEventListener('click', onCancelClick);
+    onClose();
   }
 };
 
@@ -64,7 +65,7 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   createDOMElement,
-  modalCloseListener,
+  listenerModalsCloser,
   isMaxLength,
   getTags
 };

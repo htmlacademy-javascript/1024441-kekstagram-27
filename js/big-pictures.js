@@ -1,12 +1,18 @@
 import {
   createDOMElement,
-  modalCloseListener
+  listenerModalsCloser
 } from './util.js';
+
+const COMMENTS_STEP = 5;
 
 const showBigPicture = (url, likes, comments, description) => {
   const fullPicture = document.querySelector('.big-picture');
+  const loadComments = fullPicture.querySelector('.comments-loader');
+  loadComments.classList.add('hidden');
 
-  modalCloseListener(fullPicture);
+  listenerModalsCloser(fullPicture, () => {
+    loadComments.removeEventListener('click', onLoadCommntsClick);
+  });
 
   const img = fullPicture.querySelector('img');
   img.src = url;
@@ -14,8 +20,10 @@ const showBigPicture = (url, likes, comments, description) => {
   const likesCount = fullPicture.querySelector('.likes-count');
   likesCount.textContent = likes;
 
-  const comment = fullPicture.querySelector('.comments-count');
-  comment.textContent = comments.length;
+  const count = fullPicture.querySelector('.comments-count');
+
+  const countTotal = fullPicture.querySelector('.comments-count-total');
+  countTotal.textContent = comments.length;
 
   const descriptionPhoto = fullPicture.querySelector('.social__caption');
   descriptionPhoto.textContent = description;
@@ -23,34 +31,53 @@ const showBigPicture = (url, likes, comments, description) => {
   const commentCount = fullPicture.querySelector('.social__comment-count');
   commentCount.classList.add('hidden');
 
-  const newComment = fullPicture.querySelector('.comments-loader');
-  newComment.classList.add('hidden');
-
   const socialComments = document.querySelector('.social__comments');
-  socialComments.innerHTML = '';
 
-  const commentFragments = document.createDocumentFragment();
+  let countNumber = COMMENTS_STEP;
 
-  comments.forEach((({avatar, name, message}) => {
+  const renderComments = () => {
 
-    const commentContainer = createDOMElement('li', 'social__comment');
+    const commentsSlice = comments.slice(0, countNumber);
+    count.textContent = commentsSlice.length;
+    socialComments.innerHTML = '';
 
-    const avatarUsers = createDOMElement('img', 'social__picture');
-    avatarUsers.src = avatar;
-    avatarUsers.alt = name;
-    commentContainer.append(avatarUsers);
+    const commentFragments = document.createDocumentFragment();
 
-    const commentText = createDOMElement('p', 'social__text');
-    commentText.textContent = message;
-    commentContainer.append(commentText);
-    commentFragments.append(commentContainer);
-  }));
-  socialComments.append(commentFragments);
+    if(comments.length === commentsSlice.length){
+      loadComments.classList.add('hidden');
+    }
 
-  if(comments.length > 5) {
+    commentsSlice.forEach((({avatar, name, message}) => {
+      const commentContainer = createDOMElement('li', 'social__comment');
+
+      const avatarUsers = createDOMElement('img', 'social__picture');
+      avatarUsers.src = avatar;
+      avatarUsers.alt = name;
+      commentContainer.append(avatarUsers);
+
+      const commentText = createDOMElement('p', 'social__text');
+      commentText.textContent = message;
+      commentContainer.append(commentText);
+      commentFragments.append(commentContainer);
+    }));
+    socialComments.append(commentFragments);
+  };
+
+  function onLoadCommntsClick () {
+    countNumber += COMMENTS_STEP;
+    renderComments();
+  }
+
+  loadComments.addEventListener('click', onLoadCommntsClick);
+  renderComments();
+
+  if(comments.length > COMMENTS_STEP) {
     commentCount.classList.remove('hidden');
-    newComment.classList.remove('hidden');
+    loadComments.classList.remove('hidden');
   }
 };
 
 export {showBigPicture};
+
+
+// Заводишь переменную с количеством комментов для отрисовки и функцию, в которой будет генерироваться массив и передаваться на отрисовку. Комменты отрисованные до этого само собой нужно очищать. Длина этого массива у тебя будет числом показанных

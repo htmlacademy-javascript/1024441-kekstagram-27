@@ -1,5 +1,5 @@
 import {
-  modalCloseListener,
+  listenerModalsCloser,
   isMaxLength,
   getTags
 } from './util.js';
@@ -47,7 +47,7 @@ const isMaxLengthDiscription = (inputValue) => isMaxLength(inputValue, MAX_LANGT
 
 clearInputsValue();
 uploadButton.addEventListener('change', () => {
-  modalCloseListener(userUploarWindow);
+  listenerModalsCloser(userUploarWindow);
 });
 pristine.addValidator(
   hashtagField,
