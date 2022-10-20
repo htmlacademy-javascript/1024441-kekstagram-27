@@ -1,12 +1,12 @@
 import {
   createDOMElement,
-  ModalCloseListener
+  modalCloseListener
 } from './util.js';
 
 const showBigPicture = (url, likes, comments, description) => {
   const fullPicture = document.querySelector('.big-picture');
 
-  ModalCloseListener(fullPicture);
+  modalCloseListener(fullPicture);
 
   const img = fullPicture.querySelector('img');
   img.src = url;
@@ -51,20 +51,6 @@ const showBigPicture = (url, likes, comments, description) => {
     commentCount.classList.remove('hidden');
     newComment.classList.remove('hidden');
   }
-
-  const array = socialComments.querySelectorAll('li');
-
-  for(let i = 0; i < array.length; i++) {
-    if(i === 5) {
-      for(let j = i; j < array.length; j++) {
-        array[j].classList.add('hidden');
-      }
-    }
-  }
-
-  // newComment.addEventListener('click', () => {
-  //   // нужно перебрать массив array на наличие тега hidden contains/matches
-  // });
 };
 
 export {showBigPicture};

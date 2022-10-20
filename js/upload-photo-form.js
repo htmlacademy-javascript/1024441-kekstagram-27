@@ -1,6 +1,7 @@
 import {
-  ModalCloseListener,
-  isMaxLength
+  modalCloseListener,
+  isMaxLength,
+  getTags
 } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -14,52 +15,40 @@ const hashtagField = uploadForm.querySelector('.text__hashtags');
 const hashtag = /^#[a-zа-яё0-9]+$/i;
 const hash = /^#/;
 const discriptionField = uploadForm.querySelector('.text__description');
+const MIN_LENGTH_HASHTAG = 3;
+const MAX_LENGTH_HASHTAG = 20;
+const MAX_LANGTH_DISCRIPTION_FIELD = 140;
+const MAX_HASHTAG_COUNT = 5;
 
-const inputValueCleaner = () => {
-  const inputs = uploadForm.querySelectorAll('input');
-  inputs.forEach((field) => {
-    field.innerHTML = '';
-    field.value = '';
-    pristine.reset();
-  });
+const clearInputsValue = () => {
+  hashtagField.innerHTML = '';
+  discriptionField.innerHTML = '';
+  uploadButton.value = '';
+  pristine.reset();
 };
-inputValueCleaner();
 
+const hasHash = (inputValue) => inputValue.length > 0
+  ? getTags(inputValue).every((tag) => hash.test(tag))
+  : true;
+
+const isMaxLengthTag = (inputValue) => inputValue.length > 0
+  ? getTags(inputValue).every((tag) => !(tag.length > MAX_LENGTH_HASHTAG))
+  : true;
+
+const isValidHashtag = (inputValue) => inputValue.length > 0
+  ? getTags(inputValue).every((tag) => (hashtag.test(tag) && !(tag.length < MIN_LENGTH_HASHTAG)))
+  : true;
+
+const checkMaxTags = (inputValue) => !(getTags(inputValue).length > MAX_HASHTAG_COUNT);
+
+const hasDuplicates = (inputValue) => getTags(inputValue.toUpperCase()).some((item, index, array) => array.indexOf(item) === array.lastIndexOf(item));
+
+const isMaxLengthDiscription = (inputValue) => isMaxLength(inputValue, MAX_LANGTH_DISCRIPTION_FIELD);
+
+clearInputsValue();
 uploadButton.addEventListener('change', () => {
-  ModalCloseListener(userUploarWindow);
+  modalCloseListener(userUploarWindow);
 });
-
-const stringSpliter = (string) => string.trim().split(' ');
-
-function hasHash (inputValue) {
-  const array = stringSpliter(inputValue);
-  return inputValue.length > 0 ? array.every((tag) => hash.test(tag)) : true;
-}
-
-function isMaxLengthTag (inputValue) {
-  const array = stringSpliter(inputValue);
-  return inputValue.length > 0 ? array.every((tag) => !(tag.length > 19)) : true;
-}
-
-function isValidHashtag (inputValue) {
-  const array = stringSpliter(inputValue);
-  return inputValue.length > 0 ? array.every((tag) => hashtag.test(tag)) : true;
-}
-
-function isMaxValueTag (inputValue) {
-  const array = stringSpliter(inputValue);
-  return !(array.length > 5);
-}
-
-function hasDuplicates (inputValue) {
-  const array = stringSpliter(inputValue.toUpperCase());
-  return array.some((item) => array.indexOf(item) === array.lastIndexOf(item));
-}
-
-function isMaxLengthDiscription (inputValue) {
-  return isMaxLength(inputValue, 140);
-}
-
 pristine.addValidator(
   hashtagField,
   hasHash,
@@ -75,12 +64,12 @@ pristine.addValidator(
 pristine.addValidator(
   hashtagField,
   isValidHashtag,
-  'Хэштег - после решётки должен состоять минимум из трех символов, букв или чисел и не может содержать пробелы, символы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д'
+  'Хэштег -после решётки должен состоять минимум из трех символов, букв или чисел и не может содержать пробелы, символы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д'
 );
 
 pristine.addValidator(
   hashtagField,
-  isMaxValueTag,
+  checkMaxTags,
   'Нельзя добавлять больше пяти Хэштегов'
 );
 
@@ -97,7 +86,7 @@ pristine.addValidator(
 );
 
 uploadForm.addEventListener('submit', (evt) => {
-  if(pristine.validate() === false){
+  if(!pristine.validate()){
     evt.preventDefault();
   }
 });
