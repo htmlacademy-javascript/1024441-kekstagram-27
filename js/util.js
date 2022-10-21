@@ -24,9 +24,9 @@ const createDOMElement = (element, elementClass) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const listenerModalsCloser = (modal, onClose) => {
+const setModalListeners = (modal, removeFunction) => {
   const body = document.body;
-  const closeModal = (evt) => {
+  const onDocumentKeydown = (evt) => {
     if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description')) {
       closeBigPicture();
     }
@@ -41,7 +41,7 @@ const listenerModalsCloser = (modal, onClose) => {
   function openModal () {
     modal.classList.remove('hidden');
     body.classList.add('modal-open');
-    document.addEventListener('keydown', closeModal);
+    document.addEventListener('keydown', onDocumentKeydown);
   }
 
   openModal();
@@ -49,9 +49,9 @@ const listenerModalsCloser = (modal, onClose) => {
   function closeBigPicture () {
     modal.classList.add('hidden');
     body.classList.remove('modal-open');
-    document.removeEventListener('keydown', closeModal);
+    document.removeEventListener('keydown', onDocumentKeydown);
     cancel.removeEventListener('click', onCancelClick);
-    onClose();
+    removeFunction();
   }
 };
 
@@ -65,7 +65,7 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   createDOMElement,
-  listenerModalsCloser,
+  setModalListeners,
   isMaxLength,
   getTags
 };

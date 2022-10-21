@@ -1,6 +1,6 @@
 import {
   createDOMElement,
-  listenerModalsCloser
+  setModalListeners
 } from './util.js';
 
 const COMMENTS_STEP = 5;
@@ -10,8 +10,8 @@ const showBigPicture = (url, likes, comments, description) => {
   const loadComments = fullPicture.querySelector('.comments-loader');
   loadComments.classList.add('hidden');
 
-  listenerModalsCloser(fullPicture, () => {
-    loadComments.removeEventListener('click', onLoadCommntsClick);
+  setModalListeners(fullPicture, () => {
+    // loadComments.removeEventListener('click', onLoadCommntsClick);
   });
 
   const img = fullPicture.querySelector('img');
@@ -33,48 +33,29 @@ const showBigPicture = (url, likes, comments, description) => {
 
   const socialComments = document.querySelector('.social__comments');
 
-  let countNumber = COMMENTS_STEP;
+  const countNumber = COMMENTS_STEP;
 
-  const renderComments = () => {
+  const commentsSlice = comments.slice(0, countNumber);
+  count.textContent = commentsSlice.length;
+  socialComments.innerHTML = '';
 
-    const commentsSlice = comments.slice(0, countNumber);
-    count.textContent = commentsSlice.length;
-    socialComments.innerHTML = '';
+  const commentFragments = document.createDocumentFragment();
 
-    const commentFragments = document.createDocumentFragment();
+  commentsSlice.forEach((({avatar, name, message}) => {
+    const commentContainer = createDOMElement('li', 'social__comment');
 
-    if(comments.length === commentsSlice.length){
-      loadComments.classList.add('hidden');
-    }
+    const avatarUsers = createDOMElement('img', 'social__picture');
+    avatarUsers.src = avatar;
+    avatarUsers.alt = name;
+    commentContainer.append(avatarUsers);
 
-    commentsSlice.forEach((({avatar, name, message}) => {
-      const commentContainer = createDOMElement('li', 'social__comment');
+    const commentText = createDOMElement('p', 'social__text');
+    commentText.textContent = message;
+    commentContainer.append(commentText);
+    commentFragments.append(commentContainer);
+  }));
+  socialComments.append(commentFragments);
 
-      const avatarUsers = createDOMElement('img', 'social__picture');
-      avatarUsers.src = avatar;
-      avatarUsers.alt = name;
-      commentContainer.append(avatarUsers);
-
-      const commentText = createDOMElement('p', 'social__text');
-      commentText.textContent = message;
-      commentContainer.append(commentText);
-      commentFragments.append(commentContainer);
-    }));
-    socialComments.append(commentFragments);
-  };
-
-  function onLoadCommntsClick () {
-    countNumber += COMMENTS_STEP;
-    renderComments();
-  }
-
-  loadComments.addEventListener('click', onLoadCommntsClick);
-  renderComments();
-
-  if(comments.length > COMMENTS_STEP) {
-    commentCount.classList.remove('hidden');
-    loadComments.classList.remove('hidden');
-  }
 };
 
 export {showBigPicture};
