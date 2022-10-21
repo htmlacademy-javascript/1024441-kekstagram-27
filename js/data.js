@@ -1,4 +1,7 @@
-import {getRandomInteger,getRandomArrayElement} from './util.js';
+import {
+  getRandomInteger,
+  getRandomArrayElement
+} from './util.js';
 
 const MESSAGES = [
   'Всё отлично!',
@@ -28,7 +31,7 @@ const createComment = (id) => ({
 
 const createObject = (id) => {
   const comments = [];
-  const commentsCount = getRandomInteger(1, 10);
+  const commentsCount = getRandomInteger(1, 16);
 
   for (let i = 1; i <= commentsCount; i++) {
     comments.push(createComment(i));
