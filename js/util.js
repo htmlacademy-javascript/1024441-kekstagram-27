@@ -28,11 +28,11 @@ const setModalListeners = (modal, removeFunction) => {
   const body = document.body;
   const onDocumentKeydown = (evt) => {
     if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description')) {
-      closeBigPicture();
+      closeModal();
     }
   };
   const onCancelClick = () => {
-    closeBigPicture();
+    closeModal();
   };
 
   const cancel = modal.querySelector('.cancel');
@@ -46,7 +46,7 @@ const setModalListeners = (modal, removeFunction) => {
 
   openModal();
 
-  function closeBigPicture () {
+  function closeModal () {
     modal.classList.add('hidden');
     body.classList.remove('modal-open');
     document.removeEventListener('keydown', onDocumentKeydown);
