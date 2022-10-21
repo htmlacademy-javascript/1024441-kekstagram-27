@@ -11,7 +11,7 @@ const showBigPicture = (url, likes, comments, description) => {
   loadComments.classList.add('hidden');
 
   setModalListeners(fullPicture, () => {
-    // loadComments.removeEventListener('click', onLoadCommntsClick);
+    loadComments.removeEventListener('click', onLoadCommntsClick);
   });
 
   const img = fullPicture.querySelector('img');
@@ -33,28 +33,48 @@ const showBigPicture = (url, likes, comments, description) => {
 
   const socialComments = document.querySelector('.social__comments');
 
-  const countNumber = COMMENTS_STEP;
+  let countNumber = COMMENTS_STEP;
 
-  const commentsSlice = comments.slice(0, countNumber);
-  count.textContent = commentsSlice.length;
-  socialComments.innerHTML = '';
+  const renderComments = () => {
 
-  const commentFragments = document.createDocumentFragment();
+    const commentsSlice = comments.slice(0, countNumber);
+    count.textContent = commentsSlice.length;
+    socialComments.innerHTML = '';
 
-  commentsSlice.forEach((({avatar, name, message}) => {
-    const commentContainer = createDOMElement('li', 'social__comment');
+    const commentFragments = document.createDocumentFragment();
 
-    const avatarUsers = createDOMElement('img', 'social__picture');
-    avatarUsers.src = avatar;
-    avatarUsers.alt = name;
-    commentContainer.append(avatarUsers);
+    if(comments.length === commentsSlice.length){
+      loadComments.classList.add('hidden');
+    }
 
-    const commentText = createDOMElement('p', 'social__text');
-    commentText.textContent = message;
-    commentContainer.append(commentText);
-    commentFragments.append(commentContainer);
-  }));
-  socialComments.append(commentFragments);
+    commentsSlice.forEach((({avatar, name, message}) => {
+      const commentContainer = createDOMElement('li', 'social__comment');
+
+      const avatarUsers = createDOMElement('img', 'social__picture');
+      avatarUsers.src = avatar;
+      avatarUsers.alt = name;
+      commentContainer.append(avatarUsers);
+
+      const commentText = createDOMElement('p', 'social__text');
+      commentText.textContent = message;
+      commentContainer.append(commentText);
+      commentFragments.append(commentContainer);
+    }));
+    socialComments.append(commentFragments);
+  };
+
+  function onLoadCommntsClick () {
+    countNumber += COMMENTS_STEP;
+    renderComments();
+  }
+
+  loadComments.addEventListener('click', onLoadCommntsClick);
+  renderComments();
+
+  if(comments.length > COMMENTS_STEP) {
+    commentCount.classList.remove('hidden');
+    loadComments.classList.remove('hidden');
+  }
 
 };
 
