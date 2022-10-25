@@ -4,6 +4,10 @@ import {
   getTags
 } from './util.js';
 
+import {
+  photoScale
+} from './image-editing.js';
+
 const uploadForm = document.querySelector('.img-upload__form');
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -19,6 +23,8 @@ const MIN_LENGTH_HASHTAG = 3;
 const MAX_LENGTH_HASHTAG = 20;
 const MAX_LANGTH_DISCRIPTION_FIELD = 140;
 const MAX_HASHTAG_COUNT = 5;
+
+photoScale(uploadForm);
 
 const clearInputsValue = () => {
   hashtagField.innerHTML = '';
@@ -90,3 +96,5 @@ uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+userUploarWindow.classList.remove('hidden');
