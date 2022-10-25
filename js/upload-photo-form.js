@@ -96,5 +96,3 @@ uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
-
-userUploarWindow.classList.remove('hidden');
