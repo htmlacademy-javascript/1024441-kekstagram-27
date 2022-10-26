@@ -13,8 +13,7 @@ const photoScale = (modal) => {
   const scaleConstrolValue = scaleForm.querySelector('.scale__control--value');
   const scaleSmaller = scaleForm.querySelector('.scale__control--smaller');
   const scaleBigger = scaleForm.querySelector('.scale__control--bigger');
-  const selectedPhoto = modal.querySelector('.img-upload__preview');
-  const photo = selectedPhoto.querySelector('img');
+  const selectedPhoto = modal.querySelector('.img-upload__preview img');
 
   scaleSmaller.addEventListener('click', () => {
     scaleConstrolValue.value = `${parseInt(scaleConstrolValue.value, 10) - SCALE_STEP}%`;
