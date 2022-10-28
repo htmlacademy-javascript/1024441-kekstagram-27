@@ -5,7 +5,7 @@ import {
 } from './util.js';
 
 import {
-  photoScale
+  resetEffects
 } from './image-editing.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -23,8 +23,6 @@ const MIN_LENGTH_HASHTAG = 3;
 const MAX_LENGTH_HASHTAG = 20;
 const MAX_LANGTH_DISCRIPTION_FIELD = 140;
 const MAX_HASHTAG_COUNT = 5;
-
-photoScale(uploadForm);
 
 const clearInputsValue = () => {
   hashtagField.innerHTML = '';
@@ -53,7 +51,7 @@ const isMaxLengthDiscription = (inputValue) => isMaxLength(inputValue, MAX_LANGT
 
 clearInputsValue();
 uploadButton.addEventListener('change', () => {
-  setModalListeners(userUploarWindow);
+  setModalListeners(userUploarWindow, resetEffects);
 });
 pristine.addValidator(
   hashtagField,
