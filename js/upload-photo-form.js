@@ -4,6 +4,10 @@ import {
   getTags
 } from './util.js';
 
+import {
+  resetEffects
+} from './image-editing.js';
+
 const uploadForm = document.querySelector('.img-upload__form');
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -47,7 +51,7 @@ const isMaxLengthDiscription = (inputValue) => isMaxLength(inputValue, MAX_LANGT
 
 clearInputsValue();
 uploadButton.addEventListener('change', () => {
-  setModalListeners(userUploarWindow);
+  setModalListeners(userUploarWindow, resetEffects);
 });
 pristine.addValidator(
   hashtagField,
