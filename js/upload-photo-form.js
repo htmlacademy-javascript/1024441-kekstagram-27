@@ -116,7 +116,7 @@ uploadForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if(isValid){
     blockSubmitButton();
-    createFormModalMessage('messages');
+    // createFormModalMessage('messages');
     sendData(
       () => {
         closeModal();

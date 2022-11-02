@@ -118,6 +118,9 @@ const createFormModalMessage = (isSuccess) => {
     message = templateloadingMessage.cloneNode(true);
   }
   body.append(message);
+  setTimeout(() => {
+    message.remove();
+  }, ALERT_SHOW_TIME);
 };
 
 export {
