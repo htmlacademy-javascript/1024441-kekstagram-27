@@ -163,7 +163,10 @@ const resetEffects = () => {
   selectedPhoto.style.transform = `scale(${ORIGINAL_SCALE_VALUE})`;
   effectLevel.classList.add('hidden');
   removeEffetct();
-  sliderElement.noUiSlider.destroy();
+
+  if (sliderElement.noUiSlider) {
+    sliderElement.noUiSlider.destroy();
+  }
 };
 
 export {
