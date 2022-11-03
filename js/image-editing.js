@@ -145,18 +145,20 @@ const checkOriginalEffect = () => {
 effectsList.addEventListener('change', (evt) => {
   checkOriginalEffect();
   removeEffetct();
-  const selectedEffect = effects[evt.target.value];
-  const {range, start, step, filterClass, filter, simbol} = selectedEffect;
-  sliderElement.noUiSlider.updateOptions({
-    range: range,
-    start: start,
-    step: step,
-  });
-  selectedPhoto.classList.add(filterClass);
-  sliderElement.noUiSlider.on('update', () => {
-    valueElement.value = sliderElement.noUiSlider.get();
-    selectedPhoto.style.filter = `${filter}(${valueElement.value}${simbol})`;
-  });
+  if (sliderElement.noUiSlider) {
+    const selectedEffect = effects[evt.target.value];
+    const {range, start, step, filterClass, filter, simbol} = selectedEffect;
+    sliderElement.noUiSlider.updateOptions({
+      range: range,
+      start: start,
+      step: step,
+    });
+    selectedPhoto.classList.add(filterClass);
+    sliderElement.noUiSlider.on('update', () => {
+      valueElement.value = sliderElement.noUiSlider.get();
+      selectedPhoto.style.filter = `${filter}(${valueElement.value}${simbol})`;
+    });
+  }
 });
 
 const resetEffects = () => {

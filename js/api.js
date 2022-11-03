@@ -1,8 +1,13 @@
+import {showAlert} from './util.js';
+
 const getData = (onSuccess) => {
   fetch('https://27.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((miniatures) => {
       onSuccess(miniatures);
+    })
+    .catch(() => {
+      showAlert();
     });
 };
 
