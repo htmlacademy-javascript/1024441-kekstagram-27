@@ -1,7 +1,7 @@
 //Функцияю взял с ресурса https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 import{clearInputsValue} from './upload-photo-form.js';
 
-const ALERT_SHOW_TIME = 2000;
+const ALERT_SHOW_TIME = 5000;
 const body = document.body;
 
 const getRandomInteger = (fromNumber, beforeNumber) => {
@@ -29,10 +29,11 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const setModalListeners = (modal, removeFunction) => {
   const onDocumentKeydown = (evt) => {
-    if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description')){
+    if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description') && !document.querySelector('.error')){
       closeModal();
     }
   };
+
   const onCancelClick = () => {
     closeModal();
   };
@@ -48,20 +49,11 @@ const setModalListeners = (modal, removeFunction) => {
 
   openModal();
 
-  const onModalClick = (evt) => {
-    if(evt.target === modal){
-      closeModal();
-    }
-  };
-
-  modal.addEventListener('click', onModalClick);
-
   function closeModal () {
     modal.classList.add('hidden');
     body.classList.remove('modal-open');
     document.removeEventListener('keydown', onDocumentKeydown);
     cancel.removeEventListener('click', onCancelClick);
-    modal.removeEventListener('click', onModalClick);
     removeFunction();
     clearInputsValue();
   }
@@ -75,12 +67,36 @@ const getTags = (inputValue) => {
   return array;
 };
 
+const showAlert = () => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '25%';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 5px';
+  alertContainer.style.lineHeight = '30px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+
+  alertContainer.textContent = 'Не удалось загрузить фотографии. Попробуйте ещё раз через некоторое время';
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
 const removeFormModalMessege = (modal, button) => {
-  modal.addEventListener('click', (evt) => {
-    if(evt.target === modal){
+  const onModalClick = (evt) => {
+    if(!evt.target.closest(`.${modal.className}__inner`)){
       destroyModal();
     }
-  },{once:true});
+  };
+
+  modal.addEventListener('click', onModalClick);
 
   const onDocumentKeydown = (evt) => {
     if(isEscapeKey(evt)){
@@ -98,29 +114,23 @@ const removeFormModalMessege = (modal, button) => {
   function destroyModal () {
     body.lastChild.remove();
     document.removeEventListener('keydown', onDocumentKeydown);
+    modal.removeEventListener('click', onModalClick);
   }
 };
 
-const createFormModalMessage = (isSuccess) => {
+const createFormModalMessage = (type) => {
   const templateSuccessMessage = document.querySelector('#success').content.querySelector('.success');
   const templateErrorMessage = document.querySelector('#error').content.querySelector('.error');
-  const templateloadingMessage = document.querySelector('#messages').content;
   let message;
-  if(isSuccess === 'success') {
+  if(type === 'success') {
     message = templateSuccessMessage.cloneNode(true);
     removeFormModalMessege(message, '.success__button');
   }
-  if(isSuccess === 'error') {
+  if(type === 'error') {
     message = templateErrorMessage.cloneNode(true);
     removeFormModalMessege(message, '.error__button');
   }
-  if(isSuccess === 'messages') {
-    message = templateloadingMessage.cloneNode(true);
-  }
   body.append(message);
-  setTimeout(() => {
-    message.remove();
-  }, ALERT_SHOW_TIME);
 };
 
 export {
@@ -130,5 +140,6 @@ export {
   setModalListeners,
   isMaxLength,
   getTags,
+  showAlert,
   createFormModalMessage
 };
