@@ -1,5 +1,5 @@
-import {createObjects} from './data.js';
 import {createMiniatures} from './create-miniatures.js';
+import {getData} from './api.js';
 import './upload-photo-form.js';
-createObjects();
-createMiniatures(createObjects());
+
+getData(createMiniatures);

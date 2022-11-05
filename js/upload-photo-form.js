@@ -1,13 +1,22 @@
 import {
   setModalListeners,
   isMaxLength,
-  getTags
+  getTags,
+  createFormModalMessage
 } from './util.js';
 
 import {
   resetEffects
 } from './image-editing.js';
 
+import {
+  sendData
+} from './api.js';
+
+const MIN_LENGTH_HASHTAG = 3;
+const MAX_LENGTH_HASHTAG = 20;
+const MAX_LANGTH_DISCRIPTION_FIELD = 140;
+const MAX_HASHTAG_COUNT = 5;
 const uploadForm = document.querySelector('.img-upload__form');
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -19,10 +28,7 @@ const hashtagField = uploadForm.querySelector('.text__hashtags');
 const hashtag = /^#[a-zа-яё0-9]+$/i;
 const hash = /^#/;
 const discriptionField = uploadForm.querySelector('.text__description');
-const MIN_LENGTH_HASHTAG = 3;
-const MAX_LENGTH_HASHTAG = 20;
-const MAX_LANGTH_DISCRIPTION_FIELD = 140;
-const MAX_HASHTAG_COUNT = 5;
+const submitButton = uploadForm.querySelector('.img-upload__submit');
 
 const clearInputsValue = () => {
   hashtagField.innerHTML = '';
@@ -50,9 +56,25 @@ const hasDuplicates = (inputValue) => getTags(inputValue.toUpperCase()).some((it
 const isMaxLengthDiscription = (inputValue) => isMaxLength(inputValue, MAX_LANGTH_DISCRIPTION_FIELD);
 
 clearInputsValue();
-uploadButton.addEventListener('change', () => {
-  setModalListeners(userUploarWindow, resetEffects);
-});
+
+let closeModal;
+
+const onUploadButtonChange = () => {
+  closeModal = setModalListeners(userUploarWindow, resetEffects);
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+uploadButton.addEventListener('change', onUploadButtonChange);
+
 pristine.addValidator(
   hashtagField,
   hasHash,
@@ -90,7 +112,37 @@ pristine.addValidator(
 );
 
 uploadForm.addEventListener('submit', (evt) => {
-  if(!pristine.validate()){
-    evt.preventDefault();
-  }
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if(isValid){
+    blockSubmitButton();
+    sendData(
+      () => {
+        closeModal();
+        unblockSubmitButton();
+        createFormModalMessage('success');
+      },
+      () => {
+        createFormModalMessage('error');
+        unblockSubmitButton();
+      },
+      new FormData(evt.target),
+    );}
 });
+
+// Если отправка данных прошла успешно, показывается соответствующее сообщение.
+// Разметку сообщения, которая находится в блоке #success внутри шаблона template, нужно
+// разместить перед закрывающим тегом </body>. Сообщение должно исчезать после нажатия на
+// кнопку .success__button, по нажатию на клавишу Esc и по клику на произвольную область
+//  экрана за пределами блока с сообщением.
+
+// Если при отправке данных произошла ошибка запроса, нужно показать соответствующее сообщение.
+// Разметку сообщения, которая находится в блоке #error внутри шаблона template, нужно разместить
+// перед закрывающим тегом </body>. Сообщение должно исчезать после нажатия на кнопку .error__button,
+// по нажатию на клавишу Esc и по клику на произвольную область экрана за пределами блока с сообщением.
+// В таком случае вся введённая пользователем информация сохраняется, чтобы у него была возможность отправить форму повторно.
+
+export {
+  clearInputsValue,
+  closeModal
+};
