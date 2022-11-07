@@ -1,10 +1,11 @@
 import {showAlert} from './util.js';
+import {showFilters} from './filter-photo.js';
 
-const getData = (onSuccess) => {
+const getData = () => {
   fetch('https://27.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((miniatures) => {
-      onSuccess(miniatures);
+      showFilters(miniatures);
     })
     .catch(() => {
       showAlert();
