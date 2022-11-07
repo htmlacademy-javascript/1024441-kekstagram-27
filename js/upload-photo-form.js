@@ -23,6 +23,8 @@ const pristine = new Pristine(uploadForm, {
   errorTextParent: 'img-upload__field-wrapper'
 });
 const uploadButton = uploadForm.querySelector('.img-upload__input');
+const fileChooser = uploadForm.querySelector('.img-upload__input');
+const selectedPhoto = uploadForm.querySelector('.img-upload__preview img');
 const userUploarWindow = uploadForm.querySelector('.img-upload__overlay');
 const hashtagField = uploadForm.querySelector('.text__hashtags');
 const hashtag = /^#[a-zа-яё0-9]+$/i;
@@ -61,6 +63,9 @@ let closeModal;
 
 const onUploadButtonChange = () => {
   closeModal = setModalListeners(userUploarWindow, resetEffects);
+  const file = fileChooser.files[0];
+  selectedPhoto.src = URL.createObjectURL(file);
+
 };
 
 const blockSubmitButton = () => {
