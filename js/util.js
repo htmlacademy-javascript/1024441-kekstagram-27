@@ -10,7 +10,6 @@ const getRandomInteger = (fromNumber, beforeNumber) => {
   return Math.floor(Math.random() * (beforeNumber - fromNumber) + fromNumber);
 };
 
-getRandomInteger();
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const isMaxLength = (string, maxLength) => string.length <= maxLength;
@@ -133,6 +132,15 @@ const createFormModalMessage = (type) => {
   body.append(message);
 };
 
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getRandomInteger,
   getRandomArrayElement,
@@ -141,5 +149,6 @@ export {
   isMaxLength,
   getTags,
   showAlert,
-  createFormModalMessage
+  createFormModalMessage,
+  debounce
 };

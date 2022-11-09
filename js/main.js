@@ -1,5 +1,5 @@
-import {createMiniatures} from './create-miniatures.js';
+import {showFilters} from './filter-photo.js';
 import {getData} from './api.js';
 import './upload-photo-form.js';
 
-getData(createMiniatures);
+getData(showFilters);
