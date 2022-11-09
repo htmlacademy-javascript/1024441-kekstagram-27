@@ -27,11 +27,20 @@ const createDOMElement = (element, elementClass) => {
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const setModalListeners = (modal, removeFunction) => {
+
   const onDocumentKeydown = (evt) => {
     if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description') && !document.querySelector('.error')){
       closeModal();
     }
   };
+
+  const openModal = () => {
+    modal.classList.remove('hidden');
+    body.classList.add('modal-open');
+    document.addEventListener('keydown', onDocumentKeydown);
+  };
+
+  openModal();
 
   const onCancelClick = () => {
     closeModal();
@@ -39,14 +48,6 @@ const setModalListeners = (modal, removeFunction) => {
 
   const cancel = modal.querySelector('.cancel');
   cancel.addEventListener('click', onCancelClick);
-
-  function openModal () {
-    modal.classList.remove('hidden');
-    body.classList.add('modal-open');
-    document.addEventListener('keydown', onDocumentKeydown);
-  }
-
-  openModal();
 
   function closeModal () {
     modal.classList.add('hidden');
@@ -56,7 +57,6 @@ const setModalListeners = (modal, removeFunction) => {
     removeFunction();
     clearInputsValue();
   }
-
   return onCancelClick;
 };
 
@@ -88,7 +88,7 @@ const showAlert = () => {
   }, ALERT_SHOW_TIME);
 };
 
-const removeFormModalMessege = (modal, button) => {
+const removeFormModalMessege = (modal,closeButton) => {
   const onModalClick = (evt) => {
     if(!evt.target.closest(`.${modal.className}__inner`)){
       destroyModal();
@@ -105,7 +105,7 @@ const removeFormModalMessege = (modal, button) => {
 
   document.addEventListener('keydown', onDocumentKeydown);
 
-  const cancel = modal.querySelector(button);
+  const cancel = modal.querySelector(closeButton);
   cancel.addEventListener('click', () => {
     destroyModal();
   },{once:true});

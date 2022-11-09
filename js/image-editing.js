@@ -16,35 +16,10 @@ const scaleSmaller = scaleForm.querySelector('.scale__control--smaller');
 const scaleBigger = scaleForm.querySelector('.scale__control--bigger');
 const selectedPhoto = uploadForm.querySelector('.img-upload__preview img');
 const effectLevel = uploadForm.querySelector('.img-upload__effect-level');
-const calculateScaleValue = (inputValue) => `scale(${inputValue / GET_PERCENT})`;
-
-effectLevel.classList.add('hidden');
-
-const onScaleBiggerClick = () => {
-  let scaleInputValue = parseInt(scaleControlValue.value, 10) + SCALE_STEP;
-  if(scaleInputValue >= MAX_VALUE_SCALE_CONTROL) {
-    scaleInputValue = MAX_VALUE_SCALE_CONTROL;
-  }
-  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
-  scaleControlValue.value = `${scaleInputValue}%`;
-};
-scaleBigger.addEventListener('click', onScaleBiggerClick);
-
-const onSclaeSmallerClick = () => {
-  let scaleInputValue = parseInt(scaleControlValue.value, 10) - SCALE_STEP;
-  if(scaleInputValue <= MIN_VALUE_SCALE_CONTROL) {
-    scaleInputValue = MIN_VALUE_SCALE_CONTROL;
-  }
-  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
-  scaleControlValue.value = `${scaleInputValue}%`;
-};
-scaleSmaller.addEventListener('click', onSclaeSmallerClick);
-
 const sliderElement = uploadForm.querySelector('.effect-level__slider');
 const effectsList = uploadForm.querySelector('.effects__list');
 const valueElement = uploadForm.querySelector('.effect-level__value');
 const originalEffects = uploadForm.querySelector('#effect-none');
-
 const effects = {
   none: {
     range: {
@@ -113,6 +88,31 @@ const effects = {
     simbol: ''
   }
 };
+
+const calculateScaleValue = (inputValue) => `scale(${inputValue / GET_PERCENT})`;
+
+effectLevel.classList.add('hidden');
+
+const onScaleBiggerClick = () => {
+  let scaleInputValue = parseInt(scaleControlValue.value, 10) + SCALE_STEP;
+  if(scaleInputValue >= MAX_VALUE_SCALE_CONTROL) {
+    scaleInputValue = MAX_VALUE_SCALE_CONTROL;
+  }
+  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
+  scaleControlValue.value = `${scaleInputValue}%`;
+};
+scaleBigger.addEventListener('click', onScaleBiggerClick);
+
+const onSclaeSmallerClick = () => {
+  let scaleInputValue = parseInt(scaleControlValue.value, 10) - SCALE_STEP;
+  if(scaleInputValue <= MIN_VALUE_SCALE_CONTROL) {
+    scaleInputValue = MIN_VALUE_SCALE_CONTROL;
+  }
+  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
+  scaleControlValue.value = `${scaleInputValue}%`;
+};
+scaleSmaller.addEventListener('click', onSclaeSmallerClick);
+
 
 const createSlider = () => {
   noUiSlider.create(sliderElement, {
