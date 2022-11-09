@@ -17,6 +17,7 @@ const MIN_LENGTH_HASHTAG = 3;
 const MAX_LENGTH_HASHTAG = 20;
 const MAX_LANGTH_DISCRIPTION_FIELD = 140;
 const MAX_HASHTAG_COUNT = 5;
+const PHOTO_TYPES = ['jpg', 'jpeg', 'png'];
 const uploadForm = document.querySelector('.img-upload__form');
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -64,8 +65,11 @@ let closeModal;
 const onUploadButtonChange = () => {
   closeModal = setModalListeners(userUploarWindow, resetEffects);
   const file = fileChooser.files[0];
-  selectedPhoto.src = URL.createObjectURL(file);
-
+  const fileName = file.name.toLowerCase();
+  const matches = PHOTO_TYPES.some((it) => fileName.endsWith(it));
+  if(matches) {
+    selectedPhoto.src = URL.createObjectURL(file);
+  }
 };
 
 const blockSubmitButton = () => {
