@@ -27,7 +27,7 @@ const createDOMElement = (element, elementClass) => {
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const setModalListeners = (modal, removeFunction) => {
-
+  const form = document.querySelector('.img-upload__form');
   const onDocumentKeydown = (evt) => {
     if(isEscapeKey(evt) && !evt.target.matches('.text__hashtags') && !evt.target.matches('.text__description') && !document.querySelector('.error')){
       closeModal();
@@ -56,16 +56,12 @@ const setModalListeners = (modal, removeFunction) => {
     cancel.removeEventListener('click', onCancelClick);
     removeFunction();
     clearInputsValue();
+    form.reset();
   }
   return onCancelClick;
 };
 
-const getTags = (inputValue) => {
-  const splitString = (string) => string.trim().split(' ');
-  const array = splitString(inputValue);
-  return array;
-};
-
+const getTags = (inputValue) => inputValue.split(' ').filter(Boolean);
 const showAlert = () => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -120,15 +116,16 @@ const removeFormModalMessege = (modal,closeButton) => {
 const createFormModalMessage = (type) => {
   const templateSuccessMessage = document.querySelector('#success').content.querySelector('.success');
   const templateErrorMessage = document.querySelector('#error').content.querySelector('.error');
-  let message;
-  if(type === 'success') {
-    message = templateSuccessMessage.cloneNode(true);
-    removeFormModalMessege(message, '.success__button');
-  }
-  if(type === 'error') {
-    message = templateErrorMessage.cloneNode(true);
-    removeFormModalMessege(message, '.error__button');
-  }
+  const template = type === 'success'
+    ? templateSuccessMessage
+    : templateErrorMessage;
+
+  const buttonClass = type === 'success'
+    ? '.success__button'
+    : '.error__button';
+
+  const message = template.cloneNode(true);
+  removeFormModalMessege(message, buttonClass);
   body.append(message);
 };
 

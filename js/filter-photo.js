@@ -1,4 +1,4 @@
-import {createMiniatures} from './create-miniatures.js';
+import {renderThumbnails} from './thumbanails.js';
 import {
   getRandomArrayElement,
   debounce
@@ -12,52 +12,50 @@ const defaultFilter = imageFiltersForm.querySelector('#filter-default');
 const randomFilter = imageFiltersForm.querySelector('#filter-random');
 const discussedFilter = imageFiltersForm.querySelector('#filter-discussed');
 
-const removeClassButtons = (filterButton) => {
+const setActiveFilterButton = (filterButton) => {
   filterButtons.forEach((button) => {
     button.classList.remove('img-filters__button--active');
   });
   filterButton.classList.add('img-filters__button--active');
 };
 
-const compareCommentsLength = (miniatureA, miniatureB) => {
-  if (miniatureA.comments.length < miniatureB.comments.length) {
-    return 1;
-  }
-  if (miniatureA.comments.length > miniatureB.comments.length) {
-    return -1;
-  }
-  return 0;
-};
+const compareCommentsLength = (thumbnailsA, thumbnailsB) => thumbnailsB.comments.length - thumbnailsA.comments.length;
 
-const showFilters = (miniatures) => {
+const setDisplayFilters = (thumbnailsArray) => {
+  renderThumbnails(thumbnailsArray);
   const onImageFiltersFormClick = (evt) => {
-    const miniaturesCopy = miniatures.slice(0, 25);
-    if(evt.target === defaultFilter) {
-      removeClassButtons(defaultFilter);
-      createMiniatures(miniatures);
-    }
-    if(evt.target === randomFilter) {
-      removeClassButtons(randomFilter);
-      const randomMassive = [];
-      let i = MAX_RANDOM_COUNT_VALUE;
-      while(i > 0) {
-        const randomMiniature = getRandomArrayElement(miniaturesCopy);
-        if(!randomMassive.includes(randomMiniature)){
-          randomMassive.push(randomMiniature);
-          i--;
+    const thumbnailsArrayCopy = thumbnailsArray.slice();
+    const randomArray = [];
+    let i = MAX_RANDOM_COUNT_VALUE;
+    let thumbnails;
+    switch(evt.target){
+      case defaultFilter:
+        setActiveFilterButton(defaultFilter);
+        thumbnails = thumbnailsArray;
+        break;
+
+      case randomFilter:
+        while(i > 0) {
+          const randomThumbnails = getRandomArrayElement(thumbnailsArrayCopy);
+          if(!randomArray.includes(randomThumbnails)){
+            randomArray.push(randomThumbnails);
+            i--;
+          }
         }
-      }
-      createMiniatures(randomMassive);
+        setActiveFilterButton(randomFilter);
+        thumbnails = randomArray;
+        break;
+
+      case discussedFilter :
+        setActiveFilterButton(discussedFilter);
+        thumbnails = thumbnailsArrayCopy.sort(compareCommentsLength);
+        break;
+
     }
-    if(evt.target === discussedFilter) {
-      removeClassButtons(discussedFilter);
-      miniaturesCopy.sort(compareCommentsLength);
-      createMiniatures(miniaturesCopy);
-    }
+    renderThumbnails(thumbnails);
   };
   imageFilters.classList.remove('img-filters--inactive');
-  createMiniatures(miniatures);
   imageFiltersForm.addEventListener('click', debounce(onImageFiltersFormClick));
 };
 
-export {showFilters};
+export {setDisplayFilters};
