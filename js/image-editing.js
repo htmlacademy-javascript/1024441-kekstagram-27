@@ -30,7 +30,7 @@ const effects = {
     step: '',
     class: 'effects__preview--none',
     filter: '',
-    simbol: ''
+    unit: ''
   },
   chrome: {
     range: {
@@ -41,7 +41,7 @@ const effects = {
     step: EFFECT_CHROME_STEP,
     class: 'effects__preview--chrome',
     filter: 'grayscale',
-    simbol: ''
+    unit: ''
   },
   sepia: {
     range: {
@@ -52,7 +52,7 @@ const effects = {
     step: EFFECT_SEPIA_STEP,
     filterClass: 'effects__preview--sepia',
     filter: 'sepia',
-    simbol: ''
+    unit: ''
   },
   marvin: {
     range: {
@@ -63,7 +63,7 @@ const effects = {
     step: EFFECT_MARVIN_STEP,
     filterClass: 'effects__preview--marvin',
     filter: 'invert',
-    simbol: '%'
+    unit: '%'
   },
   phobos: {
     range: {
@@ -74,7 +74,7 @@ const effects = {
     step: EFFECT_PHOBOS_STEP,
     filterClass: 'effects__preview--phobos',
     filter: 'blur',
-    simbol: 'px'
+    unit: 'px'
   },
   heat: {
     range: {
@@ -85,11 +85,11 @@ const effects = {
     step: EFFECT_HEAT_STEP,
     filterClass: 'effects__preview--heat',
     filter: 'brightness',
-    simbol: ''
+    unit: ''
   }
 };
 
-const calculateScaleValue = (inputValue) => `scale(${inputValue / GET_PERCENT})`;
+const getImageTransformValue = (inputValue) => `scale(${inputValue / GET_PERCENT})`;
 
 effectLevel.classList.add('hidden');
 
@@ -98,7 +98,7 @@ const onScaleBiggerClick = () => {
   if(scaleInputValue >= MAX_VALUE_SCALE_CONTROL) {
     scaleInputValue = MAX_VALUE_SCALE_CONTROL;
   }
-  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
+  selectedPhoto.style.transform = getImageTransformValue(scaleInputValue);
   scaleControlValue.value = `${scaleInputValue}%`;
 };
 scaleBigger.addEventListener('click', onScaleBiggerClick);
@@ -108,46 +108,35 @@ const onSclaeSmallerClick = () => {
   if(scaleInputValue <= MIN_VALUE_SCALE_CONTROL) {
     scaleInputValue = MIN_VALUE_SCALE_CONTROL;
   }
-  selectedPhoto.style.transform = calculateScaleValue(scaleInputValue);
+  selectedPhoto.style.transform = getImageTransformValue(scaleInputValue);
   scaleControlValue.value = `${scaleInputValue}%`;
 };
 scaleSmaller.addEventListener('click', onSclaeSmallerClick);
 
 
-const createSlider = () => {
-  noUiSlider.create(sliderElement, {
-    range: {
-      min: 0,
-      max: 100,
-    },
-    start: 100,
-    step: 1,
-    connect: 'lower',
-  });
-};
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  start: 100,
+  step: 1,
+  connect: 'lower',
+});
+
 
 const removeEffetct = () => {
   selectedPhoto.className = '';
   selectedPhoto.style.filter = '';
 };
 
-const checkOriginalEffect = () => {
-  if (originalEffects.checked) {
-    effectLevel.classList.add('hidden');
-    return sliderElement.noUiSlider.destroy();
-  }
-  if (!sliderElement.noUiSlider) {
-    createSlider();
-  }
-  effectLevel.classList.remove('hidden');
-};
-
 effectsList.addEventListener('change', (evt) => {
-  checkOriginalEffect();
+  effectLevel.classList.toggle('hidden', evt.target === originalEffects);
   removeEffetct();
+  sliderElement.noUiSlider.off();
   if (sliderElement.noUiSlider) {
     const selectedEffect = effects[evt.target.value];
-    const {range, start, step, filterClass, filter, simbol} = selectedEffect;
+    const {range, start, step, filterClass, filter, unit} = selectedEffect;
     sliderElement.noUiSlider.updateOptions({
       range: range,
       start: start,
@@ -156,13 +145,14 @@ effectsList.addEventListener('change', (evt) => {
     selectedPhoto.classList.add(filterClass);
     sliderElement.noUiSlider.on('update', () => {
       valueElement.value = sliderElement.noUiSlider.get();
-      selectedPhoto.style.filter = `${filter}(${valueElement.value}${simbol})`;
+      selectedPhoto.style.filter = `${filter}(${valueElement.value}${unit})`;
     });
   }
 });
 
 const resetEffects = () => {
   selectedPhoto.style.transform = `scale(${ORIGINAL_SCALE_VALUE})`;
+  scaleControlValue.value = `${MAX_VALUE_SCALE_CONTROL}%`;
   effectLevel.classList.add('hidden');
   removeEffetct();
 
