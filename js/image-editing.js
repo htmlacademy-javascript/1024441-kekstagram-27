@@ -19,7 +19,6 @@ const effectLevel = uploadForm.querySelector('.img-upload__effect-level');
 const sliderElement = uploadForm.querySelector('.effect-level__slider');
 const effectsList = uploadForm.querySelector('.effects__list');
 const valueElement = uploadForm.querySelector('.effect-level__value');
-const originalEffects = uploadForm.querySelector('#effect-none');
 const effects = {
   none: {
     range: {
@@ -27,63 +26,63 @@ const effects = {
       max: 100,
     },
     start: 100,
-    step: '',
-    class: 'effects__preview--none',
+    step: 1,
+    filterClass: 'none',
     filter: '',
     unit: ''
   },
   chrome: {
     range: {
       min: 0,
-      max: 1
+      max: 1,
     },
     start: 1,
     step: EFFECT_CHROME_STEP,
-    class: 'effects__preview--chrome',
+    filterClass: 'chrome',
     filter: 'grayscale',
     unit: ''
   },
   sepia: {
     range: {
       min: 0,
-      max: 1
+      max: 1,
     },
     start: 1,
     step: EFFECT_SEPIA_STEP,
-    filterClass: 'effects__preview--sepia',
+    filterClass: 'sepia',
     filter: 'sepia',
     unit: ''
   },
   marvin: {
     range: {
       min: 0,
-      max: 100
+      max: 100,
     },
     start: 100,
     step: EFFECT_MARVIN_STEP,
-    filterClass: 'effects__preview--marvin',
+    filterClass: 'marvin',
     filter: 'invert',
     unit: '%'
   },
   phobos: {
     range: {
       min: 0,
-      max: 3
+      max: 3,
     },
     start: 100,
     step: EFFECT_PHOBOS_STEP,
-    filterClass: 'effects__preview--phobos',
+    filterClass: 'phobos',
     filter: 'blur',
     unit: 'px'
   },
   heat: {
     range: {
       min: 1,
-      max: 3
+      max: 3,
     },
     start: 3,
     step: EFFECT_HEAT_STEP,
-    filterClass: 'effects__preview--heat',
+    filterClass: 'heat',
     filter: 'brightness',
     unit: ''
   }
@@ -113,6 +112,50 @@ const onSclaeSmallerClick = () => {
 };
 scaleSmaller.addEventListener('click', onSclaeSmallerClick);
 
+let chosenEffect = effects.none;
+const updateSlider = () => {
+  const {range, start, step} = chosenEffect;
+  sliderElement.noUiSlider.updateOptions({
+    range: range,
+    step: step,
+    start: start,
+  });
+};
+
+const removeEffect = () => {
+  chosenEffect = effects.none;
+  selectedPhoto.className = '';
+  selectedPhoto.style.filter = '';
+  valueElement.value = '';
+};
+
+const onEffectChange = (evt) => {
+  removeEffect();
+  effectLevel.classList.toggle('hidden', evt.target.value === 'none');
+  chosenEffect = effects[evt.target.value];
+  updateSlider();
+};
+
+const onSliderUpdate = () => {
+  if(chosenEffect === 'none'){
+    effectLevel.classList.add('hidden');
+    sliderElement.classList.add('hidden');
+    removeEffect();
+  }
+  const {filter, filterClass, unit} = chosenEffect;
+  const sliderValue = sliderElement.noUiSlider.get();
+  selectedPhoto.style.filter = `${filter}(${sliderValue}${unit})`;
+  selectedPhoto.classList.add(`effects__preview--${filterClass}`);
+  valueElement.value = sliderValue;
+};
+
+const resetEffects = () => {
+  selectedPhoto.style.transform = `scale(${ORIGINAL_SCALE_VALUE})`;
+  scaleControlValue.value = `${MAX_VALUE_SCALE_CONTROL}%`;
+  effectLevel.classList.add('hidden');
+  removeEffect();
+  updateSlider();
+};
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -124,42 +167,8 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-
-const removeEffetct = () => {
-  selectedPhoto.className = '';
-  selectedPhoto.style.filter = '';
-};
-
-effectsList.addEventListener('change', (evt) => {
-  effectLevel.classList.toggle('hidden', evt.target === originalEffects);
-  removeEffetct();
-  sliderElement.noUiSlider.off();
-  if (sliderElement.noUiSlider) {
-    const selectedEffect = effects[evt.target.value];
-    const {range, start, step, filterClass, filter, unit} = selectedEffect;
-    sliderElement.noUiSlider.updateOptions({
-      range: range,
-      start: start,
-      step: step,
-    });
-    selectedPhoto.classList.add(filterClass);
-    sliderElement.noUiSlider.on('update', () => {
-      valueElement.value = sliderElement.noUiSlider.get();
-      selectedPhoto.style.filter = `${filter}(${valueElement.value}${unit})`;
-    });
-  }
-});
-
-const resetEffects = () => {
-  selectedPhoto.style.transform = `scale(${ORIGINAL_SCALE_VALUE})`;
-  scaleControlValue.value = `${MAX_VALUE_SCALE_CONTROL}%`;
-  effectLevel.classList.add('hidden');
-  removeEffetct();
-
-  if (sliderElement.noUiSlider) {
-    sliderElement.noUiSlider.destroy();
-  }
-};
+effectsList.addEventListener('change', onEffectChange);
+sliderElement.noUiSlider.on('update', onSliderUpdate);
 
 export {
   resetEffects
